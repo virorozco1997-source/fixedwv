@@ -62,6 +62,19 @@ class MainActivity : AppCompatActivity() {
      */
     private var fullscreenVideoView: View? = null
     private var fullscreenVideoCallback: WebChromeClient.CustomViewCallback? = null
+
+    /**
+     * true mientras seguimos dentro de la "cadena" de redirects automáticos
+     * que dispara un sitio apenas se entra (http -> https, sin www -> con
+     * www, etc.). Se activa justo antes de cargar una URL nueva desde
+     * inicio/marcador/link externo (ver loadUrlAndShowBrowser y
+     * handleIncomingIntent) y se apaga en cuanto el usuario hace un toque
+     * real que navega a otro lado (ver hasGesture() en
+     * shouldOverrideUrlLoading). Mientras esté en true, cada
+     * onPageFinished() borra el historial del WebView: así esos redirects
+     * invisibles no quedan como páginas extra, y "atrás" desde la primera
+     * página de un sitio vuelve a inicio de un solo gesto en vez de dos.
+     */
     private var isFreshNavigation = false
 
     /**
@@ -473,10 +486,17 @@ class MainActivity : AppCompatActivity() {
                 super.onPageFinished(view, url)
                 binding.swipeRefresh.isRefreshing = false
                 syncStatusBarColorWithPage()
+
+                // Mientras isFreshNavigation siga en true (todavía no hubo
+                // ningún toque real del usuario, ver hasGesture() más abajo),
+                // cualquier redirect automático que haya hecho el sitio al
+                // entrar queda colapsado: solo sobrevive en el historial la
+                // página final. Así "atrás" desde ahí vuelve a inicio de un
+                // solo gesto, no dos.
                 if (isFreshNavigation) {
                     view?.clearHistory()
                 }
-
+            }
 
             /**
              * A diferencia de onPageStarted/onPageFinished (que solo
@@ -491,6 +511,19 @@ class MainActivity : AppCompatActivity() {
              */
             override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
                 super.doUpdateVisitedHistory(view, url, isReload)
+
+                // Igual que en onPageFinished: mientras sigamos "frescos" (sin
+                // ningún toque real del usuario todavía), cualquier cambio de
+                // URL que el sitio haga por su cuenta con pushState/replaceState
+                // —típico de banners de cookies, analítica, o sitios de una
+                // sola página— también se colapsa. Sin esto, ese cambio quedaba
+                // como una entrada extra e invisible en el historial: "atrás"
+                // primero caía ahí (una página en blanco, sin contenido propio)
+                // y recién el segundo gesto volvía a inicio.
+                if (isFreshNavigation) {
+                    view?.clearHistory()
+                }
+
                 val uri = url?.let { Uri.parse(it) } ?: return
                 if (ContentGuard.isGoogleAiMode(uri)) {
                     binding.webView.stopLoading()
@@ -535,6 +568,17 @@ class MainActivity : AppCompatActivity() {
             ): Boolean {
                 val uri = request.url
                 val scheme = uri.scheme?.lowercase()
+
+                // request.hasGesture() es true solo cuando la navegación viene
+                // de un toque real del usuario (tocar un link), y false para
+                // redirects automáticos que dispara el propio sitio o un
+                // script. En cuanto detectamos un toque real, se termina la
+                // "cadena" de redirects inicial (ver isFreshNavigation):
+                // de acá en más el historial se arma normal, como cualquier
+                // navegador.
+                if (request.hasGesture()) {
+                    isFreshNavigation = false
+                }
 
                 // Esquemas que no son web (intent://, tel:, mailto:, whatsapp:, market://, etc.)
                 // se delegan a la app nativa correspondiente del sistema.
@@ -739,6 +783,7 @@ class MainActivity : AppCompatActivity() {
                 R.color.content_block_red
             )
             else -> {
+                isFreshNavigation = true
                 val safeUri = ContentGuard.applySafeSearch(uri)
                 binding.webView.loadUrl((safeUri ?: uri).toString())
             }
@@ -1168,6 +1213,7 @@ class MainActivity : AppCompatActivity() {
                     R.color.content_block_red
                 )
                 else -> {
+                    isFreshNavigation = true
                     val safeUri = ContentGuard.applySafeSearch(data)
                     binding.webView.loadUrl((safeUri ?: data).toString())
                 }
