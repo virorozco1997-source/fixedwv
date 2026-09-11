@@ -1,0 +1,20 @@
+<resources>
+    <color name="sage_green">#87A96B</color>
+    <color name="sage_green_dark">#6E8D55</color>
+    <color name="sage_green_light">#A3C08A</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="window_background">#FFFFFF</color>
+    <color name="content_block_red">#B33A3A</color>
+    <color name="manual_block_gray">#6B7280</color>
+
+    <!-- Pantalla de espera (app abierta desde el ícono, sin ningún link):
+         blanco en modo claro, negro en modo oscuro (ver values-night). -->
+    <color name="empty_state_background">@color/white</color>
+    <color name="empty_state_text">@color/black</color>
+
+    <!-- Pantalla de inicio (buscador + marcadores): tono de superficie
+         apenas distinto del fondo, como las tarjetas agrupadas de One UI. -->
+    <color name="home_surface">#F1F1EC</color>
+    <color name="home_text_secondary">#6B6B63</color>
+</resources>

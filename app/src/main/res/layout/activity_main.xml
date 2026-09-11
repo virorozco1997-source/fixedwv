@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- Pantalla de inicio: se muestra cuando la app se abre sin ningún
+         enlace, y también al volver atrás desde la primera página de una
+         navegación (ver MainActivity.showHomeScreen). Buscador (Swisscows)
+         arriba y marcadores guardados debajo, con el look de tarjetas
+         redondeadas agrupadas de One UI 8.5. -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/emptyState"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/empty_state_background"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="72dp"
+            android:paddingBottom="32dp">
+
+            <!-- Buscador: pill totalmente redondeada, estilo One UI -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_home_search_bar"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_search_24"
+                    app:tint="@color/home_text_secondary" />
+
+                <EditText
+                    android:id="@+id/searchInput"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="@string/home_search_hint"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/empty_state_text"
+                    android:textColorHint="@color/home_text_secondary"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <!-- Encabezado de la sección de marcadores + botón para agregar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="12dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/home_bookmarks_title"
+                    android:textColor="@color/empty_state_text"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/addBookmarkButton"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_home_fab"
+                    android:contentDescription="@string/home_add_bookmark_content_description"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_add_24" />
+
+            </LinearLayout>
+
+            <!-- Tarjeta agrupada donde se insertan las filas de marcadores
+                 a mano desde MainActivity.renderBookmarks() -->
+            <LinearLayout
+                android:id="@+id/bookmarksContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_home_card"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/bookmarksEmptyMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:padding="20dp"
+                android:text="@string/home_bookmarks_empty"
+                android:textColor="@color/home_text_secondary"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Overlay de bloqueo: sitios NSFW (ContentGuard) o el buscador de
+         Google bloqueado a mano. Ver MainActivity.showBlockScreen(). -->
+    <LinearLayout
+        android:id="@+id/blockOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/content_block_red"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@+id/blockTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            tools:text="Sitio bloqueado" />
+
+        <TextView
+            android:id="@+id/blockMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            tools:text="Este sitio está bloqueado por el control de contenido." />
+
+        <Button
+            android:id="@+id/blockCancelButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/block_cancel"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+    <!-- Contenedor donde se monta el <video> cuando una página pide
+         pantalla completa (ver MainActivity.onShowCustomView/onHideCustomView).
+         Al estar último en el árbol queda por encima de todo lo demás. -->
+    <FrameLayout
+        android:id="@+id/fullscreenContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:visibility="gone" />
+
+</FrameLayout>

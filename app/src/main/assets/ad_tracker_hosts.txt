@@ -1,0 +1,106 @@
+# AdBlocker - lista básica de dominios de publicidad y rastreo (trackers).
+# Un dominio por línea. Las líneas que empiezan con # son comentarios.
+# Los subdominios se bloquean automáticamente (ej. pagead2.googlesyndication.com).
+#
+# Esto NO es un adblocker completo estilo uBlock Origin / EasyList (esos
+# manejan decenas de miles de reglas, incluyendo ocultamiento de elementos
+# por CSS). Esta lista cubre las redes de publicidad y analítica más
+# comunes a nivel de dominio: basta para eliminar la mayoría de los
+# banners, videos publicitarios y trackers de comportamiento en sitios
+# comunes, pero algún sitio muy dependiente de su propio ad-server puede
+# igual mostrar algo.
+
+# --- Google Ads / Analytics ---
+doubleclick.net
+googlesyndication.com
+googleadservices.com
+google-analytics.com
+googletagmanager.com
+googletagservices.com
+adservice.google.com
+pagead2.googlesyndication.com
+partner.googleadservices.com
+
+# --- Meta / Facebook trackers ---
+connect.facebook.net
+facebook.com/tr
+an.facebook.com
+
+# --- Amazon ads ---
+amazon-adsystem.com
+assoc-amazon.com
+
+# --- Redes de publicidad genéricas ---
+adnxs.com
+adsrvr.org
+adform.net
+adroll.com
+advertising.com
+criteo.com
+criteo.net
+outbrain.com
+taboola.com
+media.net
+pubmatic.com
+rubiconproject.com
+openx.net
+casalemedia.com
+smartadserver.com
+adcolony.com
+applovin.com
+mopub.com
+inmobi.com
+unityads.unity3d.com
+vungle.com
+chartboost.com
+moatads.com
+scorecardresearch.com
+quantserve.com
+bluekai.com
+adsafeprotected.com
+serving-sys.com
+yieldmo.com
+sharethrough.com
+teads.tv
+sovrn.com
+33across.com
+gumgum.com
+indexexchange.com
+loopme.com
+mgid.com
+revcontent.com
+zemanta.com
+adthrive.com
+mediavine.com
+ezoic.net
+adsystem.com
+
+# --- Trackers de comportamiento / analítica de terceros ---
+mixpanel.com
+segment.io
+segment.com
+amplitude.com
+hotjar.com
+fullstory.com
+mouseflow.com
+crazyegg.com
+optimizely.com
+newrelic.com
+bugsnag.com
+sentry.io
+clarity.ms
+yandex.ru/clck
+mc.yandex.ru
+matomo.cloud
+
+# --- Notificaciones push / popups intrusivos ---
+pushwoosh.com
+onesignal.com
+subscribers.com
+propellerads.com
+popads.net
+pop6.com
+adcash.com
+exoclick.com
+juicyads.com
+trafficjunky.com

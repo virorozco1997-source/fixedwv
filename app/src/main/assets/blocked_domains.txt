@@ -1,0 +1,68 @@
+# ContentGuard - lista de dominios para adultos bloqueados.
+# Un dominio por línea. Las líneas que empiezan con # son comentarios.
+# También se bloquean automáticamente los subdominios (ej. es.pornhub.com).
+
+# --- Tube sites / streaming ---
+pornhub.com
+xvideos.com
+xnxx.com
+xhamster.com
+xhamster2.com
+redtube.com
+youporn.com
+youjizz.com
+spankbang.com
+tnaflix.com
+tube8.com
+beeg.com
+hclips.com
+drtuber.com
+txxx.com
+eporner.com
+pornone.com
+motherless.com
+thumbzilla.com
+porntrex.com
+xmovies.com
+porndig.com
+sunporno.com
+upornia.com
+fapdu.com
+hqporner.com
+noodlemagazine.com
+
+# --- Productoras / catálogos ---
+brazzers.com
+bangbros.com
+realitykings.com
+naughtyamerica.com
+digitalplayground.com
+mofos.com
+teamskeet.com
+babes.com
+
+# --- Cam / streaming en vivo ---
+chaturbate.com
+livejasmin.com
+stripchat.com
+bongacams.com
+cam4.com
+myfreecams.com
+camsoda.com
+flirt4free.com
+
+# --- Hentai / animado ---
+hentaihaven.xxx
+hanime.tv
+nhentai.net
+rule34.xxx
+e-hentai.org
+
+# --- Foros / comunidades para adultos ---
+fapello.com
+coomer.party
+kemono.party
+
+# --- Buscadores / directorios sin filtro ---
+pornmd.com
+porndude.com

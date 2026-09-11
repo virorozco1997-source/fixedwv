@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Web Visor</string>
+    <string name="empty_state_message">Escaneá un código QR o abrí un enlace desde WhatsApp, el correo o la galería para comenzar.</string>
+    <string name="downloading_toast">Descargando %1$s</string>
+    <string name="download_error">No se pudo descargar el archivo</string>
+    <string name="download_permission_denied">No se puede descargar sin permiso de almacenamiento</string>
+    <string name="link_copied_toast">Link copiado</string>
+
+    <!-- Overlay de bloqueo (ContentGuard: NSFW, y bloqueo manual de Google) -->
+    <string name="block_cancel">Volver</string>
+    <string name="content_block_title">Sitio bloqueado</string>
+    <string name="content_block_message">Este sitio está bloqueado por el control de contenido.</string>
+    <string name="manual_block_title">Búsqueda de Google desactivada</string>
+    <string name="manual_block_message">El buscador de Google está desactivado en esta app. El resto de los servicios de Google (Drive, Gmail, Maps, login con Google, etc.) siguen funcionando normalmente.</string>
+    <string name="ai_mode_block_title">Modo IA desactivado</string>
+    <string name="ai_mode_block_message">El Modo IA de Google Search está desactivado en esta app.</string>
+
+    <!-- Pantalla de inicio: buscador (Swisscows) + marcadores -->
+    <string name="home_search_hint">Buscar con Swisscows</string>
+    <string name="home_bookmarks_title">Marcadores</string>
+    <string name="home_bookmarks_empty">Todavía no tenés marcadores guardados</string>
+    <string name="home_add_bookmark_content_description">Agregar marcador</string>
+    <string name="home_add_bookmark_title">Nuevo marcador</string>
+    <string name="home_add_bookmark_name_hint">Nombre</string>
+    <string name="home_add_bookmark_url_hint">Dirección web</string>
+    <string name="home_add_bookmark_save">Guardar</string>
+    <string name="home_add_bookmark_cancel">Cancelar</string>
+    <string name="home_delete_bookmark_title">Eliminar marcador</string>
+    <string name="home_delete_bookmark_message">¿Eliminar \"%1$s\" de tus marcadores?</string>
+    <string name="home_delete_bookmark_confirm">Eliminar</string>
+</resources>

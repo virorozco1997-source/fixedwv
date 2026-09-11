@@ -1,0 +1,13 @@
+<resources>
+    <color name="sage_green">#6E8D55</color>
+    <color name="sage_green_dark">#56703F</color>
+    <color name="sage_green_light">#87A96B</color>
+    <color name="window_background">#121212</color>
+
+    <!-- Pantalla de espera en modo oscuro: negro con texto blanco. -->
+    <color name="empty_state_background">@color/black</color>
+    <color name="empty_state_text">@color/white</color>
+
+    <color name="home_surface">#1F1F1D</color>
+    <color name="home_text_secondary">#A0A098</color>
+</resources>

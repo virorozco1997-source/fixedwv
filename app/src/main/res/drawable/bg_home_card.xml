@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/home_surface" />
+    <!-- Radio grande (24dp), consistente con las tarjetas agrupadas de
+         One UI 8.5 (ej. la lista de Ajustes). -->
+    <corners android:radius="24dp" />
+</shape>

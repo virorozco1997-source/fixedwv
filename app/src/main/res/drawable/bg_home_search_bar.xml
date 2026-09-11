@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/home_surface" />
+    <!-- Radio de 28dp: la barra queda totalmente redondeada (pill), como
+         las search bar de One UI 8.5. -->
+    <corners android:radius="28dp" />
+</shape>
