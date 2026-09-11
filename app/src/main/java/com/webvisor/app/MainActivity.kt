@@ -1187,6 +1187,13 @@ class MainActivity : AppCompatActivity() {
         if (data != null && (data.scheme == "http" || data.scheme == "https")) {
             originalHost = data.host
             binding.emptyState.visibility = View.GONE
+            // Sin esto, si veníamos de la pantalla de inicio (que deja
+            // swipeRefresh en INVISIBLE, ver showHomeScreen), abrir un link
+            // externo sin haber cerrado la app antes cargaba la página bien
+            // por dentro pero no se veía nada: el contenedor del WebView
+            // seguía invisible. loadUrlAndShowBrowser ya hace este mismo
+            // ajuste; acá faltaba.
+            binding.swipeRefresh.visibility = View.VISIBLE
 
             // Antes, este link se cargaba directo con loadUrl() sin pasar
             // por ninguno de los controles de contenido: esos viven en
