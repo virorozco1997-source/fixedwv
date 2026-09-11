@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
      */
     private var fullscreenVideoView: View? = null
     private var fullscreenVideoCallback: WebChromeClient.CustomViewCallback? = null
+    private var isFreshNavigation = false
 
     /**
      * Bloquea SOLO el buscador de Google en sí (google.com, www.google.com,
