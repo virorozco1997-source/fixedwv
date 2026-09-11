@@ -1,0 +1,44 @@
+name: Build APK
+
+# Se ejecuta cada vez que subís cambios a "main" (push) o manualmente
+# desde la pestaña "Actions" de GitHub con el botón "Run workflow".
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código del repo
+        uses: actions/checkout@v4
+
+      - name: Instalar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      # Genera gradlew / gradlew.bat / gradle-wrapper.jar si el repo no
+      # los trae (son binarios y a veces no se suben a git).
+      - name: Generar Gradle Wrapper si falta
+        run: |
+          if [ ! -f "./gradlew" ]; then
+            gradle wrapper --gradle-version 8.9
+          fi
+
+      - name: Dar permiso de ejecución a gradlew
+        run: chmod +x ./gradlew
+
+      - name: Compilar APK de debug
+        run: ./gradlew assembleDebug
+
+      # Deja el .apk disponible para descargar desde la pestaña "Actions"
+      # de GitHub, en la ejecución correspondiente (sección "Artifacts").
+      - name: Subir el APK como artifact descargable
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-visor-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
