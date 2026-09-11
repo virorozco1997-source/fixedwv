@@ -473,7 +473,10 @@ class MainActivity : AppCompatActivity() {
                 super.onPageFinished(view, url)
                 binding.swipeRefresh.isRefreshing = false
                 syncStatusBarColorWithPage()
-            }
+                if (isFreshNavigation) {
+                    view?.clearHistory()
+                }
+
 
             /**
              * A diferencia de onPageStarted/onPageFinished (que solo
