@@ -3,17 +3,15 @@ package com.webvisor.app
 import android.net.Uri
 
 /**
- * Buscador por defecto de la pantalla de inicio. Se usa Swisscows en vez de
- * Google porque no rastrea al usuario y su SafeSearch (filtro de contenido
- * para adultos) no se puede desactivar desde la propia web, a diferencia de
- * Google — coherente con el resto de los controles de contenido de la app
- * (ver ContentGuard).
+ * Buscador por defecto de la pantalla de inicio: Bing, siempre con
+ * Safe Search en modo estricto (adlt=strict, filtra también las imágenes).
+ * El parámetro se fuerza en cada búsqueda desde ContentGuard.applySafeSearch().
  */
 object SearchEngine {
 
-    /** Arma la URL de resultados de Swisscows para una búsqueda de texto. */
+    /** Arma la URL de resultados de Bing (Safe Search estricto) para una búsqueda de texto. */
     fun buildSearchUrl(query: String): String {
-        return "https://swisscows.com/en/web?query=" + Uri.encode(query.trim())
+        return "https://www.bing.com/search?q=" + Uri.encode(query.trim()) + "&adlt=strict"
     }
 
     /**
