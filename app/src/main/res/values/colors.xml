@@ -1,7 +1,7 @@
 <resources>
-    <color name="sage_green">#87A96B</color>
-    <color name="sage_green_dark">#6E8D55</color>
-    <color name="sage_green_light">#A3C08A</color>
+    <color name="sage_green">#6B6B6B</color>
+    <color name="sage_green_dark">#4D4D4D</color>
+    <color name="sage_green_light">#9E9E9E</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="window_background">#FFFFFF</color>
@@ -15,6 +15,6 @@
 
     <!-- Pantalla de inicio (buscador + marcadores): tono de superficie
          apenas distinto del fondo, como las tarjetas agrupadas de One UI. -->
-    <color name="home_surface">#F1F1EC</color>
-    <color name="home_text_secondary">#6B6B63</color>
+    <color name="home_surface">#F1F1F1</color>
+    <color name="home_text_secondary">#6B6B6B</color>
 </resources>
