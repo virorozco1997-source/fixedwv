@@ -90,7 +90,8 @@ object ContentGuard {
             }
 
             // Bing: adlt=strict.
-            host.endsWith("bing.com") && uri.path?.startsWith("/search") == true -> {
+            host.endsWith("bing.com") &&
+                (uri.path?.startsWith("/search") == true || uri.path?.startsWith("/images") == true) -> {
                 if (uri.getQueryParameter("adlt") == "strict") null
                 else uri.buildUpon().appendQueryParameter("adlt", "strict").build()
             }
