@@ -15,8 +15,8 @@
     <string name="ai_mode_block_title">Modo IA desactivado</string>
     <string name="ai_mode_block_message">El Modo IA de Google Search está desactivado en esta app.</string>
 
-    <!-- Pantalla de inicio: buscador (Swisscows) + marcadores -->
-    <string name="home_search_hint">Buscar con Swisscows</string>
+    <!-- Pantalla de inicio: buscador + marcadores -->
+    <string name="home_search_hint">Buscar</string>
     <string name="home_bookmarks_title">Marcadores</string>
     <string name="home_bookmarks_empty">Todavía no tenés marcadores guardados</string>
     <string name="home_add_bookmark_content_description">Agregar marcador</string>
