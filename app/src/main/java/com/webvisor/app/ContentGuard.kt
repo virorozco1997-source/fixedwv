@@ -162,4 +162,36 @@ object ContentGuard {
      * se bloquea aparte desde blocked_domains.txt.
      */
     fun isBingAi(uri: Uri): Boolean {
-        val host = uri
+        val host = uri.host?.lowercase() ?: return false
+        if (host != "bing.com" && !host.endsWith(".bing.com")) return false
+
+        val path = uri.path?.lowercase()?.trimEnd('/') ?: ""
+        return path == "/chat" || path.startsWith("/chat/") ||
+            path == "/copilot" || path.startsWith("/copilot/") ||
+            path == "/copilotsearch" || path.startsWith("/copilotsearch/")
+    }
+
+    /**
+     * Detecta las páginas de ajustes / cuenta de Bing, desde donde se puede
+     * apagar el Safe Search. También se corta cuando las pide la propia
+     * página en segundo plano (ver shouldInterceptRequest en MainActivity).
+     */
+    fun isBingSettings(uri: Uri): Boolean {
+        val host = uri.host?.lowercase() ?: return false
+        if (host != "bing.com" && !host.endsWith(".bing.com")) return false
+
+        val path = uri.path?.lowercase() ?: ""
+        return path.startsWith("/account") ||
+            path.startsWith("/settings") ||
+            path.startsWith("/preferences") ||
+            path.startsWith("/profile") ||
+            path.startsWith("/secure")
+    }
+
+    /**
+     * true si la URL abre algo desactivado en la app: la IA de un
+     * buscador (Google o Bing) o los ajustes de Bing.
+     */
+    fun isAiMode(uri: Uri): Boolean =
+        isGoogleAiMode(uri) || isBingAi(uri) || isBingSettings(uri)
+}
