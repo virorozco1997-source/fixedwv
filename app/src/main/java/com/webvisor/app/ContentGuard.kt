@@ -78,38 +78,55 @@ object ContentGuard {
      * Si la URL es de un buscador o YouTube y todavía no tiene el modo
      * seguro forzado, devuelve la URL corregida. Si no aplica o ya está
      * bien, devuelve null (no hay que reemplazar nada).
+     *
+     * Siempre REEMPLAZA el parámetro de modo seguro (no lo agrega al
+     * final): así una URL con adlt=off, safe=off o kp=-2 no lo apaga.
      */
     fun applySafeSearch(uri: Uri): Uri? {
         val host = uri.host?.lowercase() ?: return null
+        val path = uri.path ?: ""
 
         return when {
             // Google: safe=strict en cualquier búsqueda.
-            host.endsWith("google.com") && uri.path?.startsWith("/search") == true -> {
-                if (uri.getQueryParameter("safe") == "strict") null
-                else uri.buildUpon().appendQueryParameter("safe", "strict").build()
-            }
+            host.endsWith("google.com") && path.startsWith("/search") ->
+                forceParam(uri, "safe", "strict")
 
-            // Bing: adlt=strict.
-            host.endsWith("bing.com") &&
-                (uri.path?.startsWith("/search") == true || uri.path?.startsWith("/images") == true) -> {
-                if (uri.getQueryParameter("adlt") == "strict") null
-                else uri.buildUpon().appendQueryParameter("adlt", "strict").build()
-            }
+            // Bing: adlt=strict en búsquedas web e imágenes.
+            (host == "bing.com" || host.endsWith(".bing.com")) &&
+                (path.startsWith("/search") || path.startsWith("/images")) ->
+                forceParam(uri, "adlt", "strict")
 
             // DuckDuckGo: kp=1 (safe search estricto).
-            (host == "duckduckgo.com" || host == "www.duckduckgo.com") -> {
-                if (uri.getQueryParameter("kp") == "1") null
-                else uri.buildUpon().appendQueryParameter("kp", "1").build()
-            }
+            host == "duckduckgo.com" || host == "www.duckduckgo.com" ->
+                forceParam(uri, "kp", "1")
 
             // YouTube: redirigir al host "restrict" que Google ofrece para
             // forzar el Modo Restringido a nivel de red/DNS.
-            host == "youtube.com" || host == "www.youtube.com" || host == "m.youtube.com" -> {
+            host == "youtube.com" || host == "www.youtube.com" || host == "m.youtube.com" ->
                 uri.buildUpon().authority("restrict.youtube.com").build()
-            }
 
             else -> null
         }
+    }
+
+    /**
+     * Deja el parámetro [name] con el único valor [value], borrando
+     * cualquier otra copia (sin importar mayúsculas). Devuelve null si
+     * ya estaba bien, para no entrar en un bucle de recargas.
+     */
+    private fun forceParam(uri: Uri, name: String, value: String): Uri? {
+        val copies = uri.queryParameterNames.filter { it.equals(name, ignoreCase = true) }
+        if (copies.size == 1 && copies[0] == name && uri.getQueryParameters(name) == listOf(value)) {
+            return null
+        }
+
+        val rebuilt = uri.buildUpon().clearQuery()
+        uri.queryParameterNames
+            .filter { !it.equals(name, ignoreCase = true) }
+            .forEach { key ->
+                uri.getQueryParameters(key).forEach { rebuilt.appendQueryParameter(key, it) }
+            }
+        return rebuilt.appendQueryParameter(name, value).build()
     }
 
     /**
@@ -138,4 +155,11 @@ object ContentGuard {
 
         return false
     }
-}
+
+    /**
+     * Detecta la IA integrada de Bing (Copilot): bing.com/chat,
+     * bing.com/copilotsearch y bing.com/copilot. El sitio copilot.microsoft.com
+     * se bloquea aparte desde blocked_domains.txt.
+     */
+    fun isBingAi(uri: Uri): Boolean {
+        val host = uri
