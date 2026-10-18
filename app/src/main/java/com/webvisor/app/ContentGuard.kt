@@ -189,6 +189,36 @@ object ContentGuard {
     }
 
     /**
+     * Borra todas las cookies de Bing (ahí guarda sus ajustes, incluido el
+     * Safe Search). Se llama al abrir la app y antes de cada búsqueda desde
+     * la pantalla de inicio, para que el modo seguro no pueda quedar
+     * apagado por un ajuste viejo. Efecto secundario: Bing "se olvida" de
+     * la sesión y las preferencias (idioma, etc.), lo cual no afecta las
+     * búsquedas.
+     */
+    fun clearBingCookies() {
+        try {
+            val cm = android.webkit.CookieManager.getInstance()
+            val expired = "Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/"
+            for (base in listOf("https://www.bing.com", "https://bing.com")) {
+                val raw = cm.getCookie(base) ?: continue
+                raw.split(";")
+                    .map { it.substringBefore("=").trim() }
+                    .filter { it.isNotEmpty() }
+                    .forEach { name ->
+                        cm.setCookie(base, "$name=; $expired")
+                        for (domain in listOf(".bing.com", "bing.com", "www.bing.com")) {
+                            cm.setCookie(base, "$name=; $expired; Domain=$domain")
+                        }
+                    }
+            }
+            cm.flush()
+        } catch (e: Exception) {
+            Log.w(TAG, "No se pudieron borrar las cookies de Bing", e)
+        }
+    }
+
+    /**
      * true si la URL abre algo desactivado en la app: la IA de un
      * buscador (Google o Bing) o los ajustes de Bing.
      */
