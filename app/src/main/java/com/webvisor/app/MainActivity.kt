@@ -118,6 +118,8 @@ class MainActivity : AppCompatActivity() {
 
         setupStatusBar()
         setupWebView()
+        // Borra los ajustes guardados de Bing (Safe Search incluido) al abrir.
+        ContentGuard.clearBingCookies()
         // setupFullScreenOnScroll() desactivado: ocultaba la barra de
         // navegación del sistema al scrollear, y el usuario prefiere que
         // quede siempre visible. Se mantiene solo el ajuste del
@@ -774,6 +776,10 @@ class MainActivity : AppCompatActivity() {
      */
     private fun loadUrlAndShowBrowser(url: String) {
         val uri = Uri.parse(url)
+        // Antes de cada búsqueda en Bing, borra sus ajustes guardados.
+        uri.host?.lowercase()?.let {
+            if (it == "bing.com" || it.endsWith(".bing.com")) ContentGuard.clearBingCookies()
+        }
         originalHost = uri.host
         binding.emptyState.visibility = View.GONE
         binding.swipeRefresh.visibility = View.VISIBLE
