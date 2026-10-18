@@ -525,7 +525,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 val uri = url?.let { Uri.parse(it) } ?: return
-                if (ContentGuard.isGoogleAiMode(uri)) {
+                if (ContentGuard.isAiMode(uri)) {
                     binding.webView.stopLoading()
                     showBlockScreen(
                         getString(R.string.ai_mode_block_title),
@@ -558,6 +558,18 @@ class MainActivity : AppCompatActivity() {
                 // redes de publicidad/analítica conocidas antes de que
                 // lleguen a descargarse. Nunca se aplica al frame principal
                 // (ver AdBlocker.shouldBlock), solo a subrecursos.
+
+                // Ajustes de Bing (donde se apaga el Safe Search): se cortan
+                // también cuando la página los pide en segundo plano
+                // (subrecursos), no solo al navegar a ellos.
+                val reqUri = request.url
+                if (reqUri != null && !request.isForMainFrame && ContentGuard.isBingSettings(reqUri)) {
+                    return android.webkit.WebResourceResponse(
+                        "text/plain", "utf-8", 403, "Blocked", emptyMap(),
+                        java.io.ByteArrayInputStream(ByteArray(0))
+                    )
+                }
+
                 return AdBlocker.shouldBlock(request.url?.host, request.isForMainFrame)
                     ?: super.shouldInterceptRequest(view, request)
             }
@@ -594,9 +606,9 @@ class MainActivity : AppCompatActivity() {
                 // el widget de reCAPTCHA que corre bajo google.com/recaptcha/...
                 // dentro de otro sitio) — por eso "request.isForMainFrame".
                 if (request.isForMainFrame &&
-                    (ContentGuard.isGoogleAiMode(uri) || isManuallyBlockedHost(targetHost))
+                    (ContentGuard.isAiMode(uri) || isManuallyBlockedHost(targetHost))
                 ) {
-                    val isAiMode = ContentGuard.isGoogleAiMode(uri)
+                    val isAiMode = ContentGuard.isAiMode(uri)
                     showBlockScreen(
                         getString(if (isAiMode) R.string.ai_mode_block_title else R.string.manual_block_title),
                         getString(if (isAiMode) R.string.ai_mode_block_message else R.string.manual_block_message),
@@ -767,7 +779,7 @@ class MainActivity : AppCompatActivity() {
         binding.swipeRefresh.visibility = View.VISIBLE
 
         when {
-            ContentGuard.isGoogleAiMode(uri) -> showBlockScreen(
+            ContentGuard.isAiMode(uri) -> showBlockScreen(
                 getString(R.string.ai_mode_block_title),
                 getString(R.string.ai_mode_block_message),
                 R.color.manual_block_gray
@@ -1204,7 +1216,7 @@ class MainActivity : AppCompatActivity() {
             // Google, se colaba entero. Por eso acá se repiten los mismos
             // chequeos antes de cargar cualquier cosa.
             when {
-                ContentGuard.isGoogleAiMode(data) -> showBlockScreen(
+                ContentGuard.isAiMode(data) -> showBlockScreen(
                     getString(R.string.ai_mode_block_title),
                     getString(R.string.ai_mode_block_message),
                     R.color.manual_block_gray
